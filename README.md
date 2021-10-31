@@ -1,4 +1,4 @@
-% CoderQC's Public Servers
+
 # About public.coderqc.info
 Hello and welcome to my servers! 
 

@@ -202,7 +202,7 @@
             document.querySelector("#NLr3").value = json["NLr3"];
             document.querySelector("#NL3r").checked = json["NL3r"];
           }
-          generateParagraph();
+          generateParagraph(); // if this gets me into trouble ill be mad
         };
 
         GetFile.readAsText(document.querySelector("#file").files[0]);

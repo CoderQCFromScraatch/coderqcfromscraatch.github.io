@@ -1,0 +1,212 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta charset="UTF-8" />
+    <title>Current Event Writer</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Current Event Writer</h1>
+    <div id="form" onkeyup="generateParagraph()">
+      <h2>Article Information</h2>
+      <label for="NLtitle">Newsela Article Title: </label>
+      <input name="NLtitle" id="NLtitle" size="70" />
+      <br />
+      <label for="NLauthor">Newsela Article Author: </label>
+      <input name="NLauthor" id="NLAUTHOR" size="45" />
+      <br />
+      <label for="NLlink">Newsela Article Link: </label>
+      <input
+        name="NLlink"
+        id="NLlink"
+        type="url"
+        onkeyup="formatURLLink()"
+        size="50"
+      />
+      <br />
+      <h2>Article Position and Reasoning (Key Details)</h2>
+      <label for="NL3r">3 Reasons: </label>
+      <input
+        name="NL3r"
+        id="NL3r"
+        type="checkbox"
+        onchange="generateParagraph()"
+      />
+      <br />
+      <label for="NLpos">Your Position: </label>
+      <input name="NLpos" id="NLpos" size="70" />
+      <br />
+      <label for="NLq1">Quote for Reason 1: </label>
+      <input name="NLq1" id="NLq1" size="150" />
+      <br />
+      <label for="NLr1">Explanation for Reason 1 Quote: </label>
+      <input name="NLr1" id="NLr1" size="137" />
+      <br />
+      <label for="NLq2">Quote for Reason 2: </label>
+      <input name="NLq2" id="NLq2" size="150" />
+      <br />
+      <label for="NLr2">Explanation for Reason 2 Quote: </label>
+      <input name="NLr2" id="NLr2" size="137" />
+      <br />
+      <label for="NLq3">Quote for Reason 3 (optional unless required): </label>
+      <input name="NLq3" id="NLq3" size="150" />
+      <br />
+      <label for="NLr3"
+        >Explanation for Reason 3 Quote (optional unless required):
+      </label>
+      <input name="NLr3" id="NLr3" size="137" />
+      <br />
+      <h2>Current Event Paragraph</h2>
+      <textarea id="paragraph" cols="100" rows="25" readonly></textarea>
+      <br />
+      <h2>Current Event Saving/Loading</h2>
+      <input
+        type="file"
+        name="file"
+        id="file"
+        text="Import Paragraph"
+        accept=".curevent"
+        onchange="loadFile()"
+      />
+      <br />
+      <button onclick="saveParagraphAsFile()">Save File</button>
+    </div>
+    <script>
+	//CoderQC
+      var variables = [
+        "TITLE",
+        "AUTHOR",
+        "POSITION",
+        "QUOTE1",
+        "REASON1",
+        "QUOTE2",
+        "REASON2",
+        "REASON3EXTRA"
+      ];
+      var paragraphTemplate = `Looking at the article "[TITLE]" by [AUTHOR], [POSITION] The article states, "[QUOTE1]"  This shows that [REASON1] The article also states, "[QUOTE2]" This shows that [REASON2] [REASON3EXTRA] Overall, [POSITION]`;
+      var Reason3Template = `The article additionaly states, "[QUOTE3]"  This shows that [REASON3]`;
+      function formatURLLink() {
+        document.querySelector("#NLlink").value = document
+          .querySelector("#NLlink")
+          .value.split("?")[0];
+      }
+      function generateParagraph() {
+        var paragraph = paragraphTemplate;
+        var reason3 = Reason3Template;
+        if (document.querySelector("#NL3r").checked) {
+          reason3 = reason3.replace(
+            "[QUOTE3]",
+            document.querySelector("#NLq3").value
+          );
+          reason3 = reason3.replace(
+            "[REASON3]",
+            document.querySelector("#NLr3").value
+          );
+          paragraph = paragraph.replace("[REASON3EXTRA]", reason3);
+        } else {
+          paragraph = paragraph.replace("[REASON3EXTRA]", "");
+        }
+        paragraph = paragraph.replace(
+          "[TITLE]",
+          document.querySelector("#NLtitle").value
+        );
+        paragraph = paragraph.replace(
+          "[AUTHOR]",
+          document.querySelector("#NLauthor").value
+        );
+        paragraph = paragraph.replace(
+          "[POSITION]",
+          document.querySelector("#NLpos").value
+        );
+        paragraph = paragraph.replace(
+          "[QUOTE1]",
+          document.querySelector("#NLq1").value
+        );
+        paragraph = paragraph.replace(
+          "[REASON1]",
+          document.querySelector("#NLr1").value
+        );
+        paragraph = paragraph.replace(
+          "[QUOTE2]",
+          document.querySelector("#NLq2").value
+        );
+        paragraph = paragraph.replace(
+          "[REASON2]",
+          document.querySelector("#NLr2").value
+        );
+        paragraph = paragraph.replace(
+          "[POSITION]",
+          document.querySelector("#NLpos").value
+        );
+        document.querySelector("#paragraph").value = paragraph;
+      }
+      function download(filename, text) {
+        var element = document.createElement("a");
+        element.setAttribute(
+          "href",
+          "data:application/octet-stream;charset=utf-8," +
+            encodeURIComponent(text)
+        );
+        element.setAttribute("download", filename);
+
+        element.style.display = "none";
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+      }
+      function saveParagraphAsFile() {
+        file = {
+          version: 1,
+          NLtitle: document.querySelector("#NLtitle").value,
+          NLauthor: document.querySelector("#NLauthor").value,
+          NLlink: document.querySelector("#NLlink").value,
+          NLpos: document.querySelector("#NLpos").value,
+          NLq1: document.querySelector("#NLq1").value,
+          NLq2: document.querySelector("#NLq2").value,
+          NLq3: document.querySelector("#NLq3").value,
+          NLr1: document.querySelector("#NLr1").value,
+          NLr2: document.querySelector("#NLr2").value,
+          NLr3: document.querySelector("#NLr3").value,
+          NL3r: document.querySelector("#NL3r").checked
+        };
+        if (document.querySelector("#NLtitle").value == "") {
+          fileTitle = "Untitled";
+        } else {
+          fileTitle = document.querySelector("#NLtitle").value;
+        }
+        download(fileTitle + ".curevent", JSON.stringify(file));
+      }
+      function loadFile() {
+        var GetFile = new FileReader();
+
+        GetFile.onload = function () {
+          var json = JSON.parse(GetFile.result);
+          if (json["version"] == 1) {
+            document.querySelector("#NLtitle").value = json["NLtitle"];
+            document.querySelector("#NLauthor").value = json["NLauthor"];
+            document.querySelector("#NLlink").value = json["NLlink"];
+            document.querySelector("#NLpos").value = json["NLpos"];
+            document.querySelector("#NLq1").value = json["NLq1"];
+            document.querySelector("#NLq2").value = json["NLq2"];
+            document.querySelector("#NLq3").value = json["NLq3"];
+            document.querySelector("#NLr1").value = json["NLr1"];
+            document.querySelector("#NLr2").value = json["NLr2"];
+            document.querySelector("#NLr3").value = json["NLr3"];
+            document.querySelector("#NL3r").checked = json["NL3r"];
+          }
+          generateParagraph();
+        };
+
+        GetFile.readAsText(document.querySelector("#file").files[0]);
+      }
+    </script>
+  </body>
+</html>

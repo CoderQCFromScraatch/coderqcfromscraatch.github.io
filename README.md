@@ -13,6 +13,3 @@ These servers were orginally hosted from my own personal computer. But to greatl
 - Content for other games I make
 - External content for my website
 - Other random stuff
-
-
-gerjioperiosgjoerlijkgm
